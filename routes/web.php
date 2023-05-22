@@ -19,6 +19,7 @@ Route::middleware(['languages'])->group(function () {
     Route::get('/', [Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/empresa', [Controllers\CompanyController::class, 'index'])->name('company');
     Route::get('/produtos', [Controllers\ProductsController::class, 'index'])->name('products');
+    Route::get('/detalhe', [Controllers\ProductsController::class, 'detalhe'])->name('detalhe');
     Route::get('/produto/{category}', [Controllers\ProductsController::class, 'index'])->name('products.category');
     Route::get('/produtos/{slug}', [Controllers\ProductsController::class, 'details'])->name('products.details');
     Route::get('/blog', [Controllers\BlogController::class, 'index'])->name('blog');
