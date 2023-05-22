@@ -10,9 +10,9 @@ class CompanyController extends Controller
     public function index(SiteService $site, PageCompanyService $page)
     {
         $site->setAlternates('company')
-            ->setTitle('Sobre a empresa')
-            ->setBreadTitle('Sobre a empresa')
-            ->pushBreadCrumb('Sobre a empresa')
+            ->setTitle('Empresa')
+            ->setBreadTitle('Empresa')
+            ->pushBreadCrumb('Empresa')
             ->setDescriptionIfNotEmpty($page->getPage()->description)
             ->setKeywordsIfNotEmpty($page->getPage()->keywords);
 

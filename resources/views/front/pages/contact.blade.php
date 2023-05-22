@@ -3,82 +3,78 @@
 @extends('front.layout.app')
 
 @section('content')
-<main id="contato" class="">
-    <section class="formulario bg-cinza py-2" style="background-image: url('{{ asset("front/images/backgrounds/contato.png") }}');">
-
+    <main id="contato">
+        <section class="bg-light py-2 py-lg-4">
             <div class="container">
-                <nav aria-label="breadcrumb" class="d-flex flex-column flex-sm-row gap-0-50 align-items-center justify-content-between">
-                    <ol class="breadcrumb d-flex align-items-center">
-                        <li class="breadcrumb-item p-14 p-400 active" aria-current="">Home</li>
-                    
-                        <li class="breadcrumb-item">
-                            <a class="p-14 p-400 text-secondary text-decoration-none mb-1" href="">Contato</a>
-                        </li>
-                    </ol>
-                </nav>
-                <h2 class="title h2-40 p-400 text-dark w-100 text-center text-lg-start py-2">                       
-                    Entre em contato
-                    <svg class="ms-2" width="200" height="3" viewBox="0 0 200 3" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="200" y="0.5" width="2.00001" height="200" transform="rotate(90 200 0.5)" fill="#277CEA"/>
-                    </svg>                        
-                </h2>
-
-            <div class="col-lg-9">
-                <form  class="row gy-1 bg-dark-claro m-0 p-2">
-                    @csrf
-                    <div class="col-lg-6">
-                        <div class="row gx-0 gy-1 gy-lg-0-50">
-                            <div class="col-12">
-                                <input type="text" placeholder="{{__("Nome")}}*" class="form-control" wire:model.defer="name" required>
-                            </div>
-                            <div class="col-12">
-                                <input type="email" placeholder="{{__("Email")}}*" class="form-control" wire:model.defer="email" required>
-                            </div>
-                            <div class="col-12">
-                                <input type="text" placeholder="{{__("Telefone")}}*" class="form-control mask-telefone" wire:model.defer="phone" required>
-                            </div>
-                                <div class="col-12">
-                                    <select wire:model.defer="city_id" class="form-select" aria-label="Selecione uma cidade" style="background-image: url('{{ asset("front/images/backgrounds/select.svg") }}');">
-                                        <option hidden selected>{{__("Cidade")}}*</option>
-                                        @foreach (range(0,2) as $city)
-                                            <option value="">opção 1</option>
-                                        @endforeach
-                                    </select>
+                <ul class="mb-0 list-unstyled p-0 row g-1 contacts">
+                    @if ($contact->getAdresses())
+                        <li class="col-lg-4 address">
+                            <div class="card text-primary">
+                                <svg width="3em" class="h-100 flex-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                </svg>
+                                <div class="d-flex flex-column justify-content-center">
+                                    <span class="h5 mb-0 fw-bold">Visite-nos</span>
+                                    @foreach ($contact->getAdresses() as $address)
+                                        <a @if ($address['link']) href="{{ $address['link'] }}" target="_blank" @endif class="text-muted">{{ $address['address'] }}</a>
+                                    @endforeach
                                 </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <textarea id="" Placeholder="{{ __('Mensagem') }}" class="form-control h-100" rows="5" wire:model.defer="message"></textarea>
-                    </div>
-                    <div class="col-12 d-flex flex-column flex-lg-row align-items-center justify-content-lg-between gap-1">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="1" wire:model.defer="accept" required id="termosCheck">
-                            <label class="form-check-label" for="termosCheck">
-                                <x-accept-text />
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-primary text-white rounded-0 p-16 p-400">
-                            <span wire:loading.remove>
-                                {{ __('Enviar contato') }}
-                            </span>
-                            <span wire:loading.inline>
-                                {{ __("Aguarde") }}...
-                            </span>
-                        </button>
-                    </div>
-                    <x-flash-messages />
-                </form>
+                            </div>
+                        </li>
+                    @endif
+
+                    @if ($contact->getEmails())
+                        <li class="col-lg-4">
+                            <div class="card text-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="3em" class="h-100 flex-0">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                                </svg>
+                                <div class="d-flex flex-column justify-content-center">
+                                    <span class="h5 mb-0 fw-bold">Envie-nos um e-mail</span>
+                                    @foreach ($contact->getEmails() as $email)
+                                        <a href="mailto:{{ $email['email'] }}" class="text-muted">{{ $email['email'] }}</a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </li>
+                    @endif
+
+                    @if ($contact->getPhones())
+                        <li class="col-lg-4">
+                            <div class="card text-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="3em" class="h-100 flex-0">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                                </svg>
+                                <div class="d-flex flex-column justify-content-center">
+                                    <span class="h5 mb-0 fw-bold">Ligue para a gente</span>
+                                    @foreach ($contact->getPhones() as $phone)
+                                        <a class="text-muted" href="tel:+ {{ $phone['phone_link'] }}">{{ $phone['phone'] }}</a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </li>
+                    @endif
+
+                </ul>
+
             </div>
-            <h2 class="title h2-40 p-400 text-dark w-100 text-center text-lg-start py-2">                       
-                Onde estamos
-                <svg class="ms-2" width="200" height="3" viewBox="0 0 200 3" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="200" y="0.5" width="2.00001" height="200" transform="rotate(90 200 0.5)" fill="#277CEA"/>
-                </svg>                        
-            </h2>
-        </div>
-    </section>
-    <iframe class="mb--1" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.705260970629!2d-46.51169002370432!3d-23.579026862243285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce6778f8027181%3A0x3343606cd579d95a!2sSilo%20Ind%C3%BAstria%20Com%C3%A9rcio%20Acess%C3%B3rios!5e0!3m2!1spt-BR!2sbr!4v1684609369028!5m2!1spt-BR!2sbr" 
-    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    <x-contact-iframe-map />
-</main>
+        </section>
+
+        <section class="form-wrapper py-2 py-lg-4">
+            <div class="container">
+                <div class="row justify-content-center gy-2 gy-lg-0 gx-lg-3">
+                    <div class="col-lg-7">
+                        <div class="formulario bg-white shadow-lg rounded-3 p-2">
+                            <h2 class="h1 text-primary fw-bold text-center">Entre em contato</h2>
+                            <p class="text-center mb-2">Preencha o formulário e nossa equipe vai retornar o quanto antes.</p>
+                            <livewire:form-contact />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <x-contact-iframe-map />
+    </main>
 @endsection

@@ -73,43 +73,5 @@ class ProductsController extends Controller
             'relatedProducts' => $relatedProducts,
         ]);
     }
-    public function detalhe(SiteService $alternates, ProductService $products)
-    {
-        $categories = $products->getCategories();
-
-        $alternates
-            ->setAlternates('products')
-            ->pushBreadCrumb('Produtos', route_lang('products'))
-            ->setBreadTitle('Produtos')
-            ->setTitle('Produtos')
-            ->setDescriptionIfNotEmpty($products->getPage()->description)
-            ->setKeywordsIfNotEmpty($products->getPage()->keywords);
-
-        $category = request('category');
-        
-        if($category){
-            $category = $products->getCategory($category);
-            
-            $alternates
-                ->setAlternates('products.category', $category)
-                ->pushBreadCrumb($category->title)
-                ->setBreadTitle($category->title)
-                ->setTitle($category->title)
-                ->setDescriptionIfNotEmpty($category->description)
-                ->setKeywordsIfNotEmpty($category->keywords);
-        }
-        else {
-            $category = null;
-        }
-
-        $search = request('busca');
-
-        $view = $products->getProducts(20, $search, $category);
-
-        return view('front.pages.products-details', [
-            'products' => $view,
-            'categories' => $categories,
-        ]);
-    }
 
 }
